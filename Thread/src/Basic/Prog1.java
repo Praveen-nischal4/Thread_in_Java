@@ -6,7 +6,7 @@ package Basic;
 
 class FirstThread implements Runnable
 {
-	public void run()
+	public void run()         // logic inside run() will execute as threas start
 	{
 		for(int i=0;i<10;i++)
 		{
