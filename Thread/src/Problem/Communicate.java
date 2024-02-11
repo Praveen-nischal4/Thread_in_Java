@@ -22,7 +22,7 @@ class Producer extends Thread
 {
 	StringBuffer sb;       // reference of String buffer 
 	
-	boolean dataprodover =false; // boolean variable toc heck dataproduction is over or not
+	//boolean dataprodover =false; // boolean variable toc heck dataproduction is over or not
 	
 	Producer()
 	{
@@ -31,18 +31,22 @@ class Producer extends Thread
 	
 	public void run()
 	{
-	try
-	{
-		for(int i=1;i<=10;i++)
+	synchronized (sb) {
+		try
 		{
-			sb.append(i+":");
-			Thread.sleep(100);
-			System.out.println("Appending");
-		}
-		dataprodover =true;     //when production is overstore true in data production variable
-	}catch(Exception e)
-		{
-			e.printStackTrace();
+			for(int i=1;i<=10;i++)
+			{
+				sb.append(i+":");
+				Thread.sleep(100);
+				System.out.println("Appending");
+			}
+			//dataprodover =true;     //when production is overstore true in data production variable
+			
+		}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		sb.notify();
 		}
 	}
 }
@@ -58,17 +62,22 @@ class Producer extends Thread
 		
 	 public void run()
 	 {
-		 try
-		 {
-			 while(! prod.dataprodover)
+		synchronized (prod.sb) {
+			 try
 			 {
-				 Thread.sleep(10);
+//				 while(! prod.dataprodover)
+//				 {
+//					 Thread.sleep(10);
+//				 }
+				 
+				 prod.sb.wait();
+				 
+			 }catch(InterruptedException e)
+			 {
+				 e.printStackTrace();
 			 }
-		 }catch(InterruptedException e)
-		 {
-			 e.printStackTrace();
-		 }
-		 System.out.println(prod.sb);
+			 System.out.println(prod.sb);
+		}
 	 }
 	}
 
