@@ -1,4 +1,4 @@
-package ThreadPriority;
+package ThreadPriorityandGroups;
 
 class MyClass implements Runnable
 {
